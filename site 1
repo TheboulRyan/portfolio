@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HIGH PURITY COLOGNES | Haute Parfumerie</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Inter"', 'sans-serif'],
+                    },
+                    colors: {
+                        obsidian: '#0A0A0B',
+                        charcoal: '#131316',
+                        champagne: '#D4AF37',
+                        goldLight: '#F3E5AB',
+                        alabaster: '#F8F7F4',
+                        muted: '#8E8E93'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0A0A0B;
+            color: #F8F7F4;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0A0A0B;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2C2C32;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #D4AF37;
+        }
+
+        .glass-header {
+            background: rgba(10, 10, 11, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #F3E5AB 0%, #D4AF37 50%, #AA8220 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gold-border-glow:hover {
+            border-color: rgba(212, 175, 55, 0.5);
+            box-shadow: 0 10px 30px -10px rgba(212, 175, 55, 0.15);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-champagne selection:text-obsidian">
+
+    <!-- Announcement Bar -->
+    <div class="bg-charcoal text-xs tracking-[0.2em] uppercase text-center py-2.5 px-4 border-b border-white/5 text-goldLight/90">
+        Complimentary Express Shipping & Two 2ml Discovery Vials on Orders Over $150
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-40 glass-header transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Mobile Menu Button -->
+                <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-alabaster hover:text-champagne">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+
+                <!-- Left Nav Links -->
+                <nav class="hidden md:flex space-x-8 text-xs uppercase tracking-[0.15em] text-alabaster/80">
+                    <a href="#collection" class="hover:text-champagne transition-colors">Collection</a>
+                    <button onclick="openQuizModal()" class="hover:text-champagne transition-colors uppercase tracking-[0.15em]">Scent Finder</button>
+                    <a href="#philosophy" class="hover:text-champagne transition-colors">Our Craft</a>
+                </nav>
+
+                <!-- Brand Logo -->
+                <a href="#" class="text-center group">
+                    <span class="font-serif text-2xl sm:text-3xl tracking-[0.18em] font-semibold block text-alabaster group-hover:text-champagne transition-colors">
+                        HIGH PURITY
+                    </span>
+                    <span class="text-[9px] uppercase tracking-[0.45em] text-champagne block mt-0.5">
+                        Colognes
+                    </span>
+                </a>
+
+                <!-- Right Actions -->
+                <div class="flex items-center space-x-5">
+                    <!-- Search Trigger -->
+                    <div class="relative hidden sm:block">
+                        <input 
+                            type="text" 
+                            id="searchInput"
+                            onkeyup="filterProducts()"
+                            placeholder="Search notes (e.g. Oud, Bergamot)..." 
+                            class="bg-white/5 border border-white/10 rounded-full pl-9 pr-4 py-1.5 text-xs text-alabaster placeholder-muted focus:outline-none focus:border-champagne w-48 lg:w-60 transition-all"
+                        >
+                        <i data-lucide="search" class="w-3.5 h-3.5 text-muted absolute left-3 top-2"></i>
+                    </div>
+
+                    <!-- Wishlist Icon -->
+                    <button onclick="toggleWishlistFilter()" id="wishlistNavBtn" class="relative p-1.5 text-alabaster/80 hover:text-champagne transition-colors" title="Saved Fragrances">
+                        <i data-lucide="heart" class="w-5 h-5"></i>
+                        <span id="wishlistBadge" class="hidden absolute -top-1 -right-1 bg-champagne text-obsidian text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span>
+                    </button>
+
+                    <!-- Cart Icon -->
+                    <button onclick="toggleCart(true)" class="relative p-1.5 text-alabaster/80 hover:text-champagne transition-colors" title="Shopping Bag">
+                        <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                        <span id="cartBadge" class="absolute -top-1 -right-1 bg-champagne text-obsidian text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobileMenu" class="hidden md:hidden bg-charcoal border-b border-white/10 px-6 py-4 space-y-4">
+            <input 
+                type="text" 
+                onkeyup="document.getElementById('searchInput').value = this.value; filterProducts();"
+                placeholder="Search notes..." 
+                class="w-full bg-white/5 border border-white/10 rounded-full px-4 py-2 text-xs text-alabaster"
+            >
+            <div class="flex flex-col space-y-3 text-xs uppercase tracking-[0.15em]">
+                <a href="#collection" onclick="toggleMobileMenu()" class="py-1 hover:text-champagne">Collection</a>
+                <button onclick="toggleMobileMenu(); openQuizModal()" class="text-left py-1 hover:text-champagne uppercase tracking-[0.15em]">Scent Finder Quiz</button>
+                <a href="#philosophy" onclick="toggleMobileMenu()" class="py-1 hover:text-champagne">Our Craft</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-[82vh] flex items-center overflow-hidden border-b border-white/5">
+        <!-- Background Image with Overlay -->
+        <div class="absolute inset-0 z-0">
+            <img 
+                src="https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=2000&q=80" 
+                alt="Luxury Fragrance Bottle" 
+                class="w-full h-full object-cover object-center opacity-45 scale-105"
+            >
+            <div class="absolute inset-0 bg-gradient-to-r from-obsidian via-obsidian/85 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-obsidian/40"></div>
+        </div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
+            <div class="max-w-2xl space-y-6 animate-fade-in">
+                <div class="inline-flex items-center space-x-2 border border-champagne/30 bg-champagne/5 px-3.5 py-1.5 rounded-full">
+                    <span class="w-1.5 h-1.5 rounded-full bg-champagne animate-pulse"></span>
+                    <span class="text-[11px] uppercase tracking-[0.2em] text-champagne">Extrait de Parfum &bull; Small Batch</span>
+                </div>
+
+                <h1 class="font-serif text-4xl sm:text-6xl lg:text-7xl font-normal leading-[1.1] tracking-tight">
+                    Distilled to <br>
+                    <span class="italic gold-gradient-text">Absolute Purity.</span>
+                </h1>
+
+                <p class="text-alabaster/75 text-base sm:text-lg font-light leading-relaxed max-w-xl">
+                    Uncompromising concentrations of rare botanicals, aged resins, and cold-pressed citrus. Crafted for lasting sillage and unmistakable presence.
+                </p>
+
+                <div class="pt-4 flex flex-wrap gap-4">
+                    <a href="#collection" class="bg-champagne text-obsidian font-medium text-xs uppercase tracking-[0.2em] px-8 py-4 hover:bg-goldLight transition-all">
+                        Explore Collection
+                    </a>
+                    <button onclick="openQuizModal()" class="border border-white/25 text-alabaster font-medium text-xs uppercase tracking-[0.2em] px-8 py-4 hover:border-champagne hover:text-champagne transition-all flex items-center gap-2">
+                        <i data-lucide="sparkles" class="w-4 h-4 text-champagne"></i>
+                        Find Your Scent
+                    </button>
+                </div>
+
+                <!-- Trust Badges -->
+                <div class="pt-8 grid grid-cols-3 gap-6 border-t border-white/10 max-w-md text-xs text-muted">
+                    <div>
+                        <span class="block text-alabaster font-serif text-lg">25–35%</span>
+                        Oil Concentration
+                    </div>
+                    <div>
+                        <span class="block text-alabaster font-serif text-lg">90 Days</span>
+                        Cold Maceration
+                    </div>
+                    <div>
+                        <span class="block text-alabaster font-serif text-lg">12+ Hrs</span>
+                        Skin Longevity
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Catalog & Filters Section -->
+    <section id="collection" class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+            <div>
+                <span class="text-xs uppercase tracking-[0.25em] text-champagne block mb-2">The Private Vault</span>
+                <h2 class="font-serif text-3xl sm:text-4xl text-alabaster">Signature Formulations</h2>
+            </div>
+
+            <!-- Sort & Active Filter Info -->
+            <div class="flex items-center gap-4">
+                <span id="resultCount" class="text-xs text-muted">Showing 8 fragrances</span>
+                <select id="sortSelect" onchange="filterProducts()" class="bg-charcoal border border-white/10 text-xs text-alabaster px-4 py-2.5 rounded focus:outline-none focus:border-champagne">
+                    <option value="featured">Sort: Featured</option>
+                    <option value="price-asc">Price: Low to High</option>
+                    <option value="price-desc">Price: High to Low</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Olfactory Family Filter Pills -->
+        <div class="flex flex-wrap items-center gap-2.5 mb-12 pb-6 border-b border-white/10">
+            <button onclick="setCategory('All')" class="filter-btn active px-5 py-2 rounded-full text-xs uppercase tracking-[0.15em] transition-all bg-champagne text-obsidian font-medium" data-cat="All">
+                All Scents
+            </button>
+            <button onclick="setCategory('Woody & Oud')" class="filter-btn px-5 py-2 rounded-full text-xs uppercase tracking-[0.15em] transition-all bg-charcoal text-alabaster/70 hover:text-alabaster border border-white/10" data-cat="Woody & Oud">
+                Woody & Oud
+            </button>
+            <button onclick="setCategory('Fresh & Citrus')" class="filter-btn px-5 py-2 rounded-full text-xs uppercase tracking-[0.15em] transition-all bg-charcoal text-alabaster/70 hover:text-alabaster border border-white/10" data-cat="Fresh & Citrus">
+                Fresh & Citrus
+            </button>
+            <button onclick="setCategory('Warm & Oriental')" class="filter-btn px-5 py-2 rounded-full text-xs uppercase tracking-[0.15em] transition-all bg-charcoal text-alabaster/70 hover:text-alabaster border border-white/10" data-cat="Warm & Oriental">
+                Warm & Oriental
+            </button>
+            <button onclick="setCategory('Aquatic & Aromatic')" class="filter-btn px-5 py-2 rounded-full text-xs uppercase tracking-[0.15em] transition-all bg-charcoal text-alabaster/70 hover:text-alabaster border border-white/10" data-cat="Aquatic & Aromatic">
+                Aquatic & Aromatic
+            </button>
+        </div>
+
+        <!-- Product Grid -->
+        <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Populated via JavaScript -->
+        </div>
+    </section>
+
+    <!-- Brand Philosophy Banner -->
+    <section id="philosophy" class="py-24 bg-charcoal border-y border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div class="relative">
+                    <div class="aspect-[4/5] overflow-hidden rounded-sm border border-white/10">
+                        <img 
+                            src="https://images.unsplash.com/photo-1615634260167-c8cdede054de?auto=format&fit=crop&w=1000&q=80" 
+                            alt="Perfumer Crafting Fragrance" 
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <div class="absolute -bottom-6 -right-6 bg-obsidian border border-champagne/30 p-6 max-w-xs hidden sm:block">
+                        <p class="font-serif italic text-champagne text-lg">"Purity is not the absence of complexity—it is the removal of filler."</p>
+                        <p class="text-[11px] uppercase tracking-widest text-muted mt-2">— Master Perfumer, H.P. Atelier</p>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <span class="text-xs uppercase tracking-[0.25em] text-champagne">The High Purity Standard</span>
+                    <h2 class="font-serif text-3xl sm:text-5xl leading-tight">Zero Dyes. Zero Phthalates. Pure Olfactory Art.</h2>
+                    <p class="text-alabaster/70 font-light leading-relaxed">
+                        Conventional designer fragrances dilute their formulas with synthetic fixatives and heavy alcohols. At High Purity Colognes, every bottle is macerated in small oak and steel vats for 90 days before filtration, allowing raw Mysore sandalwood, Calabrian bergamot, and aged Cambodian oud to harmonize naturally.
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
+                        <div class="border-l border-champagne/40 pl-4">
+                            <h4 class="font-serif text-lg text-alabaster">Extrait Potency</h4>
+                            <p class="text-xs text-muted mt-1 leading-relaxed">Formulated at up to 35% pure parfum oil so two sprays endure from morning until midnight.</p>
+                        </div>
+                        <div class="border-l border-champagne/40 pl-4">
+                            <h4 class="font-serif text-lg text-alabaster">Ethical Harvests</h4>
+                            <p class="text-xs text-muted mt-1 leading-relaxed">Direct-trade botanicals sourced sustainably from Grasse, Calabria, and Southeast Asia.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-obsidian pt-20 pb-12 border-t border-white/10 text-xs text-muted">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 pb-16 border-b border-white/10">
+                <div class="space-y-4">
+                    <div class="font-serif text-xl tracking-[0.2em] text-alabaster">HIGH PURITY</div>
+                    <p class="leading-relaxed">Haute Parfumerie dedicated to uncompromised raw ingredients and modern minimalist luxury.</p>
+                    <div class="flex space-x-4 pt-2 text-alabaster/70">
+                        <a href="#" class="hover:text-champagne"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+                        <a href="#" class="hover:text-champagne"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+                        <a href="#" class="hover:text-champagne"><i data-lucide="mail" class="w-4 h-4"></i></a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="uppercase tracking-[0.2em] text-alabaster font-medium mb-4">Collections</h4>
+                    <ul class="space-y-2.5">
+                        <li><a href="#collection" onclick="setCategory('Woody & Oud')" class="hover:text-champagne">The Oud Reserve</a></li>
+                        <li><a href="#collection" onclick="setCategory('Fresh & Citrus')" class="hover:text-champagne">Citrus & Vetiver</a></li>
+                        <li><a href="#collection" onclick="setCategory('Warm & Oriental')" class="hover:text-champagne">Nocturnal Extraits</a></li>
+                        <li><a href="#collection" onclick="setCategory('All')" class="hover:text-champagne">Discovery Sets</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="uppercase tracking-[0.2em] text-alabaster font-medium mb-4">Client Care</h4>
+                    <ul class="space-y-2.5">
+                        <li><button onclick="openQuizModal()" class="hover:text-champagne">Bespoke Scent Consultation</button></li>
+                        <li><a href="#" class="hover:text-champagne">Complimentary Sample Policy</a></li>
+                        <li><a href="#" class="hover:text-champagne">Shipping & Returns</a></li>
+                        <li><a href="#" class="hover:text-champagne">Bottle Refill Program</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="uppercase tracking-[0.2em] text-alabaster font-medium mb-4">Private Dispatch</h4>
+                    <p class="mb-4">Receive early access to limited harvest batches and seasonal releases.</p>
+                    <form onsubmit="handleNewsletter(event)" class="flex">
+                        <input type="email" required placeholder="Enter your email" class="bg-charcoal border border-white/15 px-3.5 py-2.5 text-alabaster w-full focus:outline-none focus:border-champagne">
+                        <button type="submit" class="bg-champagne text-obsidian px-4 font-medium uppercase tracking-wider hover:bg-goldLight transition-colors">Join</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <p>&copy; 2026 High Purity Colognes. All rights reserved.</p>
+                <p class="text-[11px] uppercase tracking-widest text-champagne/70">Use Code <span class="text-champagne font-semibold">PURITY10</span> for 10% off your first bottle</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ================= MODALS & DRAWERS ================= -->
+
+    <!-- Quick View & Olfactory Pyramid Modal -->
+    <div id="productModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+        <div class="bg-charcoal border border-white/15 max-w-4xl w-full rounded-sm overflow-hidden shadow-2xl relative animate-fade-in max-h-[92vh] overflow-y-auto">
+            <button onclick="closeProductModal()" class="absolute top-4 right-4 z-10 p-2 bg-obsidian/60 rounded-full text-alabaster hover:text-champagne">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <div id="modalContent" class="grid grid-cols-1 md:grid-cols-2">
+                <!-- Populated dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scent Finder Quiz Modal -->
+    <div id="quizModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+        <div class="bg-charcoal border border-champagne/30 max-w-xl w-full p-8 rounded-sm relative animate-fade-in">
+            <button onclick="closeQuizModal()" class="absolute top-4 right-4 text-muted hover:text-alabaster">
+                <i data-lucide="x" class="w-5 h-5">
